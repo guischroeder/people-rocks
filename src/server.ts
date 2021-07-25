@@ -1,13 +1,13 @@
 import 'reflect-metadata';
-import { createExpressServer } from 'routing-controllers';
 import { ConnectionIsNotSetError } from 'typeorm/error';
 import { dbConnection } from './core/database';
+import { ExpressApp } from './core/ExpressApp';
 import { log } from './core/logger';
 import { HelloWorldController } from './modules/hello-world';
 
 const PORT = process.env.PORT || 3000;
 
-const app = createExpressServer({
+const app = ExpressApp.createServer({
   controllers: [HelloWorldController],
 });
 

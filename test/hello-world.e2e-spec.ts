@@ -1,7 +1,7 @@
 import { Application } from 'express';
-import { createExpressServer } from 'routing-controllers';
 import request from 'supertest';
 import { Connection } from 'typeorm';
+import { ExpressApp } from '../src/core/ExpressApp';
 import { HelloWorldController } from '../src/modules/hello-world';
 import { createTestConnection } from './helpers/create-test-connection';
 
@@ -10,7 +10,7 @@ describe('HelloWorldController', () => {
   let connection: Connection;
 
   beforeAll(async () => {
-    app = createExpressServer({
+    app = ExpressApp.createServer({
       controllers: [HelloWorldController],
     });
 

@@ -1,10 +1,18 @@
-import { Response } from 'express';
-import { Controller, Get, Res } from 'routing-controllers';
+import 'reflect-metadata';
+import { Controller, Get } from 'routing-controllers';
+import { Inject, Service } from 'typedi';
+import { HelloWorldService } from './hello-world.service';
 
 @Controller('/')
+@Service()
 export class HelloWorldController {
+  constructor(
+    @Inject()
+    private readonly helloWorldService: HelloWorldService,
+  ) {}
+
   @Get('/')
-  public sayHello(@Res() res: Response) {
-    return res.send('Hello World');
+  public hello() {
+    return this.helloWorldService.hello();
   }
 }
