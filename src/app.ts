@@ -1,19 +1,15 @@
-import {
-  Response,
-  Controller,
-  Get,
-  attachControllers,
-} from '@decorators/express';
-import express from 'express';
-
-export const app = express();
+import 'reflect-metadata';
+import { Response } from 'express';
+import { createExpressServer, Controller, Get, Res } from 'routing-controllers';
 
 @Controller('/')
 export class HelloWorldController {
   @Get('/')
-  public sayHello(@Response() res: express.Response): void {
+  public sayHello(@Res() res: Response): void {
     res.send('Hello World');
   }
 }
 
-attachControllers(app, [HelloWorldController]);
+export const app = createExpressServer({
+  controllers: [HelloWorldController],
+});
