@@ -35,7 +35,7 @@ jobs:
         run: yarn build
 
       - name: Check build entrypoint path
-        run: test -f build/src/app.js
+        run: test -f build/src/server.js
 
       - name: Lint
         run: yarn lint
