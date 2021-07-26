@@ -1,18 +1,23 @@
 import 'reflect-metadata';
+import { createExpressServer, useContainer } from 'routing-controllers';
+import { Container } from 'typedi';
 import { ConnectionIsNotSetError } from 'typeorm/error';
+import { options } from './core/config/ormconfig';
 import { dbConnection } from './core/database';
-import { ExpressApp } from './core/ExpressApp';
 import { log } from './core/logger';
-import { HelloWorldController } from './modules/hello-world';
+import { CompanyController } from './modules/company/company.controller';
 
 const PORT = process.env.PORT || 3000;
 
-const app = ExpressApp.createServer({
-  controllers: [HelloWorldController],
+useContainer(Container);
+
+const app = createExpressServer({
+  controllers: [CompanyController],
 });
 
 const init = async () => {
-  await dbConnection();
+  await dbConnection(options);
+
   app.listen(PORT, () => log.info(`Listening on port ${PORT}`));
 };
 
