@@ -1,11 +1,11 @@
 import { createConnection, useContainer } from 'typeorm';
 import { Container } from 'typeorm-typedi-extensions';
-import { options } from './config/ormconfig';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { log } from './logger';
 
 useContainer(Container);
 
-export const dbConnection = async () => {
+export const dbConnection = async (options: PostgresConnectionOptions) => {
   const connection = await createConnection({
     ...options,
     logger: 'debug',
