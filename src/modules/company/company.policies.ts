@@ -11,7 +11,7 @@ export class CompanyAlreadyExists extends Error {
 
 @Service()
 export class CompanyPolicies {
-  public assertCompanyExist(company?: Company): void {
+  public assertCompanyExists(company?: Company): void {
     if (company) {
       throw new CompanyAlreadyExists(company.name);
     }

@@ -30,9 +30,13 @@ export class CompanyService {
     return await this.companyRepository.findOneOrFail(id);
   }
 
+  public async getCompanyByName(name: string): Promise<Company> {
+    return await this.companyRepository.findOneOrFail({ name });
+  }
+
   private async checkCompany({ name }: CompanyDTO): Promise<void> {
     const company = await this.companyRepository.findOne({ name });
 
-    this.companyPolicies.assertCompanyExist(company);
+    this.companyPolicies.assertCompanyExists(company);
   }
 }
