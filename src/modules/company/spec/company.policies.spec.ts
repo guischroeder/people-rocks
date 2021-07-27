@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import { Container } from 'typedi';
 import { Company } from '../company.entity';
-import { CompanyPolicies } from '../company.policies';
+import { CompanyAlreadyExists, CompanyPolicies } from '../company.policies';
 
 describe('Company Policies', () => {
   let companyPolicies: CompanyPolicies;
@@ -19,6 +19,8 @@ describe('Company Policies', () => {
     const company = new Company();
     company.name = 'Dunder Mifflin';
 
-    expect(() => companyPolicies.assertCompanyExist(company)).toThrow();
+    expect(() => companyPolicies.assertCompanyExist(company)).toThrow(
+      CompanyAlreadyExists,
+    );
   });
 });

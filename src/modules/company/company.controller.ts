@@ -14,7 +14,9 @@ export class CompanyController {
   ) {}
 
   @Post()
-  public async createCompany(@Body() company: CompanyDTO): Promise<Company> {
+  public async createCompany(
+    @Body({ validate: true }) company: CompanyDTO,
+  ): Promise<Company> {
     return await this.companyService.createCompany(company);
   }
 
