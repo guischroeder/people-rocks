@@ -1,11 +1,19 @@
 import { Service } from 'typedi';
 import { Company } from './company.entity';
 
+export class CompanyAlreadyExists extends Error {
+  constructor(name: string) {
+    super();
+    this.message = `A company with name ${name} already exists`;
+    this.name = 'CompanyAlreadyExists';
+  }
+}
+
 @Service()
 export class CompanyPolicies {
-  public assertCompanyExist(company?: Company): void {
+  public assertCompanyExists(company?: Company): void {
     if (company) {
-      throw new Error(`A company with name ${company.name} already exists`);
+      throw new CompanyAlreadyExists(company.name);
     }
   }
 }

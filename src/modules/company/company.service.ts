@@ -27,12 +27,12 @@ export class CompanyService {
   }
 
   public async getOneCompany(id: string): Promise<Company> {
-    return await this.companyRepository.findOneOrFail(id);
+    return await this.companyRepository.findOneOrFail({ id });
   }
 
   private async checkCompany({ name }: CompanyDTO): Promise<void> {
     const company = await this.companyRepository.findOne({ name });
 
-    this.companyPolicies.assertCompanyExist(company);
+    this.companyPolicies.assertCompanyExists(company);
   }
 }

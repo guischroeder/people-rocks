@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import { Body, Controller, Get, Param, Post } from 'routing-controllers';
+import { Body, JsonController, Get, Param, Post } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { CompanyDTO } from './company.dto';
 import { Company } from './company.entity';
 import { CompanyService } from './company.service';
 
-@Controller('/companies')
 @Service()
+@JsonController('/companies')
 export class CompanyController {
   constructor(
     @Inject()
