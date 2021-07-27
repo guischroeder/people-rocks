@@ -23,6 +23,6 @@ export class Person {
   public email: string;
 
   @JoinColumn({ name: 'companyId' })
-  @ManyToOne(() => Company, (c) => c.person)
+  @ManyToOne(() => Company, (c) => c.person, { cascade: true })
   public company: Company;
 }

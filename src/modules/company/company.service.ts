@@ -27,11 +27,7 @@ export class CompanyService {
   }
 
   public async getOneCompany(id: string): Promise<Company> {
-    return await this.companyRepository.findOneOrFail(id);
-  }
-
-  public async getCompanyByName(name: string): Promise<Company> {
-    return await this.companyRepository.findOneOrFail({ name });
+    return await this.companyRepository.findOneOrFail({ id });
   }
 
   private async checkCompany({ name }: CompanyDTO): Promise<void> {

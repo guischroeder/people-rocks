@@ -54,10 +54,12 @@ describe('CompanyController (e2e)', () => {
     });
 
     it('should throw error when company already exists', async () => {
-      await request(app)
+      const { body } = await request(app)
         .post('/companies')
         .send({ name: 'Dunder Mifflin' })
         .expect(500);
+
+      expect(body.name).toBe('CompanyAlreadyExists');
     });
   });
 });

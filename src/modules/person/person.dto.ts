@@ -11,5 +11,5 @@ export class PersonDTO {
 
   @IsString()
   @IsNotEmpty()
-  public company: string;
+  public companyId: string;
 }

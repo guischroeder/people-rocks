@@ -1,5 +1,12 @@
 import 'reflect-metadata';
-import { Body, Get, JsonController, Post } from 'routing-controllers';
+import {
+  Body,
+  Delete,
+  Get,
+  JsonController,
+  Param,
+  Post,
+} from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { PersonDTO } from './person.dto';
 import { Person } from './person.entity';
@@ -21,5 +28,15 @@ export class PersonController {
   @Get()
   public async getAllPersons(): Promise<Person[]> {
     return await this.personService.getAllPersons();
+  }
+
+  @Get('/:id')
+  public async getOnePerson(@Param('id') id: string): Promise<Person> {
+    return await this.personService.getOnePerson(id);
+  }
+
+  @Delete('/:id')
+  public async deletePerson(@Param('id') id: string): Promise<Person> {
+    return await this.personService.deletePerson(id);
   }
 }

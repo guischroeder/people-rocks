@@ -17,7 +17,7 @@ export class PersonService {
   ) {}
 
   public async createPerson(person: PersonDTO): Promise<Person> {
-    const company = await this.companyService.getCompanyByName(person.company);
+    const company = await this.companyService.getOneCompany(person.companyId);
 
     await this.checkPerson(person);
 
@@ -29,6 +29,16 @@ export class PersonService {
 
   public async getAllPersons(): Promise<Person[]> {
     return this.personRepository.find();
+  }
+
+  public async getOnePerson(id: string): Promise<Person> {
+    return await this.personRepository.findOneOrFail({ id });
+  }
+
+  public async deletePerson(id: string): Promise<Person> {
+    const person = await this.getOnePerson(id);
+
+    return await this.personRepository.remove(person);
   }
 
   private async checkPerson({ name }: PersonDTO): Promise<void> {
