@@ -35,17 +35,26 @@ describe('CompanyController (e2e)', () => {
     expect(body).toEqual(companies[0]);
   });
 
-  it('POST /companies', async () => {
-    const { body } = await request(app)
-      .post('/companies')
-      .send({ name: 'Apple' })
-      .expect(200);
+  describe('POST /companies', () => {
+    it('should create new company', async () => {
+      const { body } = await request(app)
+        .post('/companies')
+        .send({ name: 'Apple' })
+        .expect(200);
 
-    expect(body).toEqual(
-      expect.objectContaining({
-        name: 'Apple',
-      }),
-    );
+      expect(body).toEqual(
+        expect.objectContaining({
+          name: 'Apple',
+        }),
+      );
+    });
+
+    it('should throw error when company already exists', async () => {
+      await request(app)
+        .post('/companies')
+        .send({ name: 'Dunder Mifflin' })
+        .expect(500);
+    });
   });
 
   afterAll(() => connection.close());
