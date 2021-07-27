@@ -1,18 +1,18 @@
 import 'reflect-metadata';
-import { createExpressServer, useContainer } from 'routing-controllers';
+import { useContainer } from 'routing-controllers';
 import { Container } from 'typedi';
 import { ConnectionIsNotSetError } from 'typeorm/error';
 import { options } from './core/config/ormconfig';
 import { dbConnection } from './core/database';
+import { createExpressServer } from './core/express';
 import { log } from './core/logger';
-import { CompanyController } from './modules/company/company.controller';
 
 const PORT = process.env.PORT || 3000;
 
 useContainer(Container);
 
 const app = createExpressServer({
-  controllers: [CompanyController],
+  controllers: [__dirname + '/modules/**/*.controller.ts'],
 });
 
 const init = async () => {

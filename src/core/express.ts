@@ -10,7 +10,7 @@ import { Container } from 'typedi';
 
 useContainer(Container);
 
-export const createTestExpressServer = (
+export const createExpressServer = (
   options: RoutingControllersOptions,
 ): Application => {
   const app = express();

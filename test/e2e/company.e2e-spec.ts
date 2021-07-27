@@ -2,22 +2,26 @@ import { Application } from 'express';
 import request from 'supertest';
 import { Connection, getRepository } from 'typeorm';
 import { dbConnection } from '../../src/core/database';
+import { createExpressServer } from '../../src/core/express';
 import { CompanyController } from '../../src/modules/company/company.controller';
 import { Company } from '../../src/modules/company/company.entity';
 import { seed } from '../utils/seed';
 import { testConnectionOptions } from '../utils/test-connection-options';
-import { createTestExpressServer } from '../utils/test-express-app';
 
 describe('CompanyController (e2e)', () => {
   let app: Application;
   let connection: Connection;
 
   beforeAll(async () => {
-    app = createTestExpressServer({ controllers: [CompanyController] });
+    app = createExpressServer({ controllers: [CompanyController] });
 
     connection = await dbConnection(testConnectionOptions);
 
     await seed();
+  });
+
+  afterAll(() => {
+    connection?.close();
   });
 
   it('GET /companies', async () => {
@@ -50,12 +54,12 @@ describe('CompanyController (e2e)', () => {
     });
 
     it('should throw error when company already exists', async () => {
-      await request(app)
+      const { body } = await request(app)
         .post('/companies')
         .send({ name: 'Dunder Mifflin' })
         .expect(500);
+
+      expect(body.name).toBe('CompanyAlreadyExists');
     });
   });
-
-  afterAll(() => connection.close());
 });
