@@ -19,8 +19,6 @@ export class PersonService {
   public async createPerson(person: PersonDTO): Promise<Person> {
     const company = await this.companyService.getOneCompany(person.companyId);
 
-    await this.checkPerson(person);
-
     return this.personRepository.save({
       ...person,
       company,
@@ -35,15 +33,38 @@ export class PersonService {
     return await this.personRepository.findOneOrFail({ id });
   }
 
+  public async assignManager(
+    personId: string,
+    managerId: string,
+  ): Promise<Person> {
+    const person = await this.getOnePerson(personId);
+    const manager = await this.getOnePerson(managerId);
+
+    this.personPolicies.assertPersonsAreNotFromSameCompany(person, manager);
+    this.personPolicies.assertPersonCanNotManageOwnManager(person, manager);
+
+    return await this.personRepository.save({
+      ...person,
+      managerId,
+    });
+  }
+
   public async deletePerson(id: string): Promise<Person> {
     const person = await this.getOnePerson(id);
 
+    // Setting managerId to null for each person manually once
+    // cascade is not working for relations with the same entity
+    const managedByDeletedPerson = await this.personRepository.find({
+      managerId: person.id,
+    });
+
+    for (const managedPerson of managedByDeletedPerson) {
+      await this.personRepository.save({
+        ...managedPerson,
+        managerId: null,
+      });
+    }
+
     return await this.personRepository.remove(person);
-  }
-
-  private async checkPerson({ name }: PersonDTO): Promise<void> {
-    const person = await this.personRepository.findOne({ name });
-
-    this.personPolicies.assertPersonExists(person);
   }
 }
