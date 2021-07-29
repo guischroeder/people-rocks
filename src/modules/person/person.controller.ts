@@ -6,6 +6,7 @@ import {
   JsonController,
   Param,
   Post,
+  Put,
 } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { PersonDTO } from './person.dto';
@@ -33,6 +34,14 @@ export class PersonController {
   @Get('/:id')
   public async getOnePerson(@Param('id') id: string): Promise<Person> {
     return await this.personService.getOnePerson(id);
+  }
+
+  @Put('/:id')
+  public async assignManager(
+    @Param('id') personId: string,
+    @Body() { managerId }: { managerId: string },
+  ): Promise<Person> {
+    return await this.personService.assignManager(personId, managerId);
   }
 
   @Delete('/:id')

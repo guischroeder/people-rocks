@@ -28,7 +28,7 @@ describe('PersonController (e2e)', () => {
   it('GET /persons', async () => {
     const { body } = await request(app).get('/persons').expect(200);
 
-    expect(body).toHaveLength(5);
+    expect(body).toHaveLength(10);
   });
 
   describe('POST /persons', () => {
@@ -63,23 +63,6 @@ describe('PersonController (e2e)', () => {
       );
     });
 
-    it('should throw error when person already exists', async () => {
-      const payload = {
-        name: 'Jim Halpert',
-        email: 'jimhalper@dundermifflin.com',
-        companyId: company.id,
-      };
-
-      await getRepository(Person).save(payload);
-
-      const { body } = await request(app)
-        .post('/persons')
-        .send(payload)
-        .expect(500);
-
-      expect(body.name).toEqual('PersonAlreadyExists');
-    });
-
     it('should throw error when given company not exists', async () => {
       const payload = {
         name: 'Jim Halpert',
@@ -93,6 +76,66 @@ describe('PersonController (e2e)', () => {
         .expect(500);
 
       expect(body.name).toBe('EntityNotFound');
+    });
+  });
+
+  describe('PUT /persons/:id', () => {
+    it('should assign a person as a manager of another', async () => {
+      const persons = await getRepository(Person).find();
+      const person = persons[0];
+      const anotherPerson = persons[1];
+
+      const { body } = await request(app)
+        .put(`/persons/${person.id}`)
+        .send({ managerId: anotherPerson.id })
+        .expect(200);
+
+      expect(body).toMatchObject({ ...person, managerId: anotherPerson.id });
+    });
+
+    it('should throw error by assigning a person to manage his own manager', async () => {
+      const dunderMifflin = await getRepository(Company).findOneOrFail({
+        name: 'Dunder Mifflin',
+      });
+      const [personToManage, personToBeManaged] = await getRepository(
+        Person,
+      ).find({
+        companyId: dunderMifflin.id,
+      });
+
+      const personManaged = await getRepository(Person).save({
+        ...personToBeManaged,
+        managerId: personToManage.id,
+      });
+
+      const { body } = await request(app)
+        .put(`/persons/${personManaged.id}`)
+        .send({ managerId: personToManage.id })
+        .expect(500);
+
+      expect(body.name).toBe('PersonCanNotManageOwnManager');
+    });
+
+    it('should throw error by assigning a person to manage another from other company', async () => {
+      const [dunderMifflin, nineNine] = await getRepository(Company).find({
+        where: [{ name: 'Dunder Mifflin' }, { name: '99' }],
+      });
+
+      const personFromDunderMifflin = await getRepository(Person).findOneOrFail(
+        {
+          companyId: dunderMifflin.id,
+        },
+      );
+      const personFromNineNine = await getRepository(Person).findOneOrFail({
+        companyId: nineNine.id,
+      });
+
+      const { body } = await request(app)
+        .put(`/persons/${personFromDunderMifflin.id}`)
+        .send({ managerId: personFromNineNine.id })
+        .expect(500);
+
+      expect(body.name).toBe('PersonsAreNotFromSameCompany');
     });
   });
 });
