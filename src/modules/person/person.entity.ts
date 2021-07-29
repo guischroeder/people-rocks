@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   Entity,
   JoinColumn,
@@ -9,12 +10,15 @@ import {
 import { Company } from '../company/company.entity';
 
 @Entity()
-export class Person {
+export class Person extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
   @PrimaryColumn('uuid')
   public companyId: string;
+
+  @Column('uuid', { nullable: true })
+  public managerId: string | null;
 
   @Column('text')
   public name: string;
@@ -23,6 +27,11 @@ export class Person {
   public email: string;
 
   @JoinColumn({ name: 'companyId' })
-  @ManyToOne(() => Company, (c) => c.person, { cascade: true })
+  @ManyToOne(() => Company, { onDelete: 'CASCADE' })
   public company: Company;
+
+  @ManyToOne(() => Person, {
+    onDelete: 'SET NULL',
+  })
+  public manager: Person;
 }

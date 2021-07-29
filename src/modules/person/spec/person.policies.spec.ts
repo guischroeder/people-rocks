@@ -2,7 +2,11 @@ import 'reflect-metadata';
 
 import { Container } from 'typedi';
 import { Person } from '../person.entity';
-import { PersonAlreadyExists, PersonPolicies } from '../person.policies';
+import {
+  PersonPolicies,
+  PersonsAreNotFromSameCompany,
+  PersonCanNotManageOwnManager,
+} from '../person.policies';
 
 describe('Person Policies', () => {
   let personPolicies: PersonPolicies;
@@ -11,16 +15,55 @@ describe('Person Policies', () => {
     personPolicies = Container.get(PersonPolicies);
   });
 
-  it('should not throw error if a company does not exist', () => {
-    expect(() => personPolicies.assertPersonExists()).not.toThrow();
+  describe('#assertPersonsAreNotFromSameCompany', () => {
+    it('should throw error if employee and manager are not from the same company', () => {
+      const personToManage = { companyId: '123' };
+      const personToBeManaged = { companyId: '456' };
+
+      expect(() =>
+        personPolicies.assertPersonsAreNotFromSameCompany(
+          personToManage as Person,
+          personToBeManaged as Person,
+        ),
+      ).toThrow(PersonsAreNotFromSameCompany);
+    });
+
+    it('should not throw error if employee and manager are from the same company', () => {
+      const personToManage = { companyId: '123' };
+      const personToBeManaged = { companyId: '123' };
+
+      expect(() =>
+        personPolicies.assertPersonsAreNotFromSameCompany(
+          personToBeManaged as Person,
+          personToManage as Person,
+        ),
+      ).not.toThrow();
+    });
   });
 
-  it('shoul throw error if a person with given name already exist', () => {
-    const person = new Person();
-    person.name = 'Michael Scott';
+  describe('#assertPersonCanNotManageOwnManager', () => {
+    it('should throw error by assigning employee to manage his own manager', () => {
+      const personToManage = { id: '123', managerId: '456' };
+      const personToBeManaged = { id: '456', managerId: '123' };
 
-    expect(() => personPolicies.assertPersonExists(person)).toThrow(
-      PersonAlreadyExists,
-    );
+      expect(() =>
+        personPolicies.assertPersonCanNotManageOwnManager(
+          personToBeManaged as Person,
+          personToManage as Person,
+        ),
+      ).toThrow(PersonCanNotManageOwnManager);
+    });
+
+    it('should not throw error by assigning employee to manage another employee', () => {
+      const personToManage = { id: '123', managerId: '456' };
+      const personToBeManaged = { id: '789', managerId: '' };
+
+      expect(() =>
+        personPolicies.assertPersonCanNotManageOwnManager(
+          personToBeManaged as Person,
+          personToManage as Person,
+        ),
+      ).not.toThrow();
+    });
   });
 });

@@ -6,6 +6,7 @@ import {
   JsonController,
   Param,
   Post,
+  Put,
 } from 'routing-controllers';
 import { Inject, Service } from 'typedi';
 import { PersonDTO } from './person.dto';
@@ -35,8 +36,36 @@ export class PersonController {
     return await this.personService.getOnePerson(id);
   }
 
+  @Put('/:id')
+  public async assignManager(
+    @Param('id') personId: string,
+    @Body() { managerId }: { managerId: string },
+  ): Promise<Person> {
+    return await this.personService.assignManager(personId, managerId);
+  }
+
   @Delete('/:id')
   public async deletePerson(@Param('id') id: string): Promise<Person> {
     return await this.personService.deletePerson(id);
+  }
+
+  @Get('/employees/:id/pairs') public async getEmployeePairs(
+    @Param('id') employeeId: string,
+  ): Promise<Person[]> {
+    return await this.personService.getEmployeePairs(employeeId);
+  }
+
+  @Get('/managers/:id/team')
+  public async getManagerTeam(
+    @Param('id') managerId: string,
+  ): Promise<Person[]> {
+    return await this.personService.getManagerTeam(managerId);
+  }
+
+  @Get('/organizational-graph/:id')
+  public async getOrganizationalGraph(
+    @Param('id') managerId: string,
+  ): Promise<Record<string, unknown>> {
+    return await this.personService.getOrganizationalGraph(managerId);
   }
 }
