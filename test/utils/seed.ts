@@ -7,6 +7,8 @@ export const seed = async (): Promise<void> => {
   const companies = await getRepository(Company).save([
     { name: 'Dunder Mifflin' },
     { name: '99' },
+    { name: 'Thoughtworks' },
+    { name: 'People Rocks' },
   ]);
 
   for (const company of companies) {
