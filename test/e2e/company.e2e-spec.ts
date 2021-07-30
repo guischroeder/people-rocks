@@ -27,7 +27,7 @@ describe('CompanyController (e2e)', () => {
   it('GET /companies', async () => {
     const { body } = await request(app).get('/companies').expect(200);
 
-    expect(body).toHaveLength(4);
+    expect(body).toHaveLength(3);
   });
 
   it('GET /companies/:id', async () => {

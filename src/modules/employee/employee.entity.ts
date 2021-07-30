@@ -10,7 +10,7 @@ import {
 import { Company } from '../company/company.entity';
 
 @Entity()
-export class Person extends BaseEntity {
+export class Employee extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
@@ -30,8 +30,8 @@ export class Person extends BaseEntity {
   @ManyToOne(() => Company, { onDelete: 'CASCADE' })
   public company: Company;
 
-  @ManyToOne(() => Person, {
+  @ManyToOne(() => Employee, {
     onDelete: 'SET NULL',
   })
-  public manager: Person;
+  public manager: Employee;
 }

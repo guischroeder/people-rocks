@@ -1,9 +1,9 @@
 import { each, makeFactoryWithRequired } from 'factory.ts/lib/sync';
 import * as faker from 'faker';
-import { Person } from '../../src/modules/person/person.entity';
+import { Employee } from '../../src/modules/employee/employee.entity';
 
-export const PersonBuilder = makeFactoryWithRequired<
-  Partial<Person>,
+export const EmployeeBuilder = makeFactoryWithRequired<
+  Partial<Employee>,
   'company'
 >({
   name: each(() => faker.name.findName()),
