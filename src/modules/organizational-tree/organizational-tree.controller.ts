@@ -1,4 +1,5 @@
 import { Get, JsonController, Param } from 'routing-controllers';
+import { OpenAPI } from 'routing-controllers-openapi';
 import { Inject, Service } from 'typedi';
 import { OrganizationTreeService } from './organizational-tree.service';
 
@@ -11,6 +12,9 @@ export class OrganizationTreeController {
   ) {}
 
   @Get('/:managerId')
+  @OpenAPI({
+    summary: 'Get the tree of led-employees/employees below a manager',
+  })
   public async getOrganizationalTree(
     @Param('managerId') managerId: string,
   ): Promise<Record<string, unknown>> {
