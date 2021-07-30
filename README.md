@@ -2,7 +2,7 @@
 
 ## Welcome to People Rocks!
 This project is a code challange for a mysterious company. Here you'll find some of my skills in backend.
-This was built with **Express + TypeScript + TypeORM** and a utility lib `routing-controllers`.
+This was built with **Express + TypeScript + TypeORM**.
 
 ## The project
 The project is a CRUD of Companies and Employees. So you can have fun by creating a company, registering employees into it, assign one as manager of anothers and retrive some information like pairs of employees, teams and employees tree.
