@@ -6,13 +6,22 @@ import { options } from './core/config/ormconfig';
 import { dbConnection } from './core/database';
 import { createExpressServer } from './core/express';
 import { log } from './core/logger';
+import { CompanyController } from './modules/company/company.controller';
+import { EmployeeController } from './modules/employee/employee.controller';
+import { ManagerController } from './modules/manager/manager.controller';
+import { OrganizationTreeController } from './modules/organizational-tree/organizational-tree.controller';
 
 const PORT = process.env.PORT || 3000;
 
 useContainer(Container);
 
 const app = createExpressServer({
-  controllers: [__dirname + '/modules/**/*.controller.ts'],
+  controllers: [
+    CompanyController,
+    EmployeeController,
+    ManagerController,
+    OrganizationTreeController,
+  ],
 });
 
 const init = async () => {
