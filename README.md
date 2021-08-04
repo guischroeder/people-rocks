@@ -1,7 +1,7 @@
 # People Rocks API
 
 ## Welcome to People Rocks!
-This project is a code challange for a mysterious company. Here you'll find some of my skills in backend.
+This project is a code challenge for a mysterious company. Here you'll find some of my skills in backend.
 This was built with **Express + TypeScript + TypeORM**.
 
 ## The project
@@ -42,4 +42,4 @@ The application use four endpoints:
 - `/managers`
 - `/organizational-graph`
 
-To know a bit more about them, run the server and access `http://localhost:3000/docs` and see the swagger.
+To know a bit more about them, run the server and access `http://localhost:3000/docs` to see the swagger.
