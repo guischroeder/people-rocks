@@ -13,7 +13,7 @@ export class ManagerController {
   ) {}
 
   @Get('/:id/team')
-  @OpenAPI({ summary: 'Get all members of the team of a manager' })
+  @OpenAPI({ summary: 'Get all members from manager team' })
   public async getManagerTeam(
     @Param('id') managerId: string,
   ): Promise<Employee[]> {
