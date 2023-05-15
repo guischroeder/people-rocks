@@ -2,7 +2,7 @@ import { Application } from 'express';
 import request from 'supertest';
 import { Connection, getRepository } from 'typeorm';
 import { dbConnection } from '../../src/core/database';
-import { createExpressServer } from '../../src/core/express';
+import { createApp } from '../../src/core/create-app';
 import { Company } from '../../src/modules/company/company.entity';
 import { Employee } from '../../src/modules/employee/employee.entity';
 import { OrganizationTreeController } from '../../src/modules/organizational-tree/organizational-tree.controller';
@@ -14,7 +14,7 @@ describe('OrganizationalTreeController (e2e)', () => {
   let connection: Connection;
 
   beforeAll(async () => {
-    app = createExpressServer({
+    app = createApp({
       controllers: [OrganizationTreeController],
     });
 

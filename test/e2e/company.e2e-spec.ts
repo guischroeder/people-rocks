@@ -2,7 +2,7 @@ import { Application } from 'express';
 import request from 'supertest';
 import { Connection, getRepository } from 'typeorm';
 import { dbConnection } from '../../src/core/database';
-import { createExpressServer } from '../../src/core/express';
+import { createApp } from '../../src/core/create-app';
 import { CompanyController } from '../../src/modules/company/company.controller';
 import { Company } from '../../src/modules/company/company.entity';
 import { seed } from '../utils/seed';
@@ -13,7 +13,7 @@ describe('CompanyController (e2e)', () => {
   let connection: Connection;
 
   beforeAll(async () => {
-    app = createExpressServer({ controllers: [CompanyController] });
+    app = createApp({ controllers: [CompanyController] });
 
     connection = await dbConnection(testConnectionOptions);
 

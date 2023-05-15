@@ -17,7 +17,7 @@ const { defaultMetadataStorage } = require('class-transformer/cjs/storage');
 
 useContainer(Container);
 
-export const createExpressServer = (
+export const createApp = (
   routingControllersOPtions: RoutingControllersOptions,
 ): Application => {
   const app = express();

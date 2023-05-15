@@ -2,7 +2,7 @@ import { Application } from 'express';
 import request from 'supertest';
 import { Connection, getRepository } from 'typeorm';
 import { dbConnection } from '../../src/core/database';
-import { createExpressServer } from '../../src/core/express';
+import { createApp } from '../../src/core/create-app';
 import { Company } from '../../src/modules/company/company.entity';
 import { Employee } from '../../src/modules/employee/employee.entity';
 import { ManagerController } from '../../src/modules/manager/manager.controller';
@@ -14,7 +14,7 @@ describe('ManagerController (e2e)', () => {
   let connection: Connection;
 
   beforeAll(async () => {
-    app = createExpressServer({
+    app = createApp({
       controllers: [ManagerController],
     });
 
